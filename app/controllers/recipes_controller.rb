@@ -10,8 +10,10 @@ class RecipesController < ApplicationController
     end
 
     def create
-        if session[:user_id]
-            recipe = Recipe.create(recipe_params)
+        # Saves a new recipe to the databse if it is valid
+        recipe = Recipe.create(recipe_params)
+        if recipe && recipe.valid?
+            recipes[:user_id]
             render json: recipe, status: :created
         else
             render json: { errors: ["Invalid data"] }, status: :unprocessable_entity
