@@ -6,6 +6,7 @@ class UsersController < ApplicationController
         if user && user.valid?
         # Saves the user's ID in the session hash
             session[:user_id] = user.id
+            # Renders JSON response w/ created status code ( 201 )
             render json: user, status: :created
         else
             # Returns JSON response w/ error messages and HTTP status ( 422 )
@@ -14,11 +15,15 @@ class UsersController < ApplicationController
     end
 
     def show
+        # If the user is logged in ( user_id in sesssion hash )
         if session[:user_id]
+            # Returns a JSON response w/ user's ID, username, image URL, and bio
             user = User.find(session[:user_id])
+            # Returns an HTTP status code of 201 ( created )
             render json: user, status: :created
         else
-            render json: { errors: "Must be logged in"}, status: :unauthorized
+            # Returns a JSON response with error message and status code of 401 ( unauthorized )
+            render json: { errors: "Must be logged in" }, status: :unauthorized
         end
     end
 
